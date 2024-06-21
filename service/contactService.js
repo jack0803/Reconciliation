@@ -1,5 +1,5 @@
 const Contact = require('../models/contact');
-const { Sequelize, Op } = require('sequelize');
+const { Op } = require('sequelize');
 
 const identifyContact = async ({ email, phoneNumber }) => {
     // Find existing contacts by email or phoneNumber
@@ -53,7 +53,7 @@ const identifyContact = async ({ email, phoneNumber }) => {
         primaryContact = await Contact.create({ email, phoneNumber, linkPrecedence: 'primary' });
     }
 
-    // Get all related contacts
+    // Get all updated contacts with the same email or phoneNumber
     const relatedContacts = await Contact.findAll({
         where: {
             [Op.or]: [
@@ -64,6 +64,7 @@ const identifyContact = async ({ email, phoneNumber }) => {
         }
     });
 
+    // Extract emails, phone numbers, and secondary contact IDs for the response
     const emails = [...new Set(relatedContacts.map(contact => contact.email).filter(Boolean))];
     const phoneNumbers = [...new Set(relatedContacts.map(contact => contact.phoneNumber).filter(Boolean))];
     const secondaryContactIds = relatedContacts.filter(contact => contact.linkPrecedence === 'secondary').map(contact => contact.id);
