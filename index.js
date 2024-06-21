@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./db');
+const contactRoute = require('./routes/contactRoute');
 
 const app = express();
 app.use(bodyParser.json());
