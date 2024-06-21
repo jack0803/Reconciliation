@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
+app.use(contactRoute);
 const PORT = process.env.PORT || 3000;
 
 sequelize.authenticate()
